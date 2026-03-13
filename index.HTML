@@ -384,12 +384,15 @@ Digite seu número para entrar
 </h2>
 
 <input id="phoneLogin" placeholder="Seu número"
+type="tel"
+inputmode="numeric"
 style="
 padding:12px;
 width:220px;
 border-radius:8px;
 border:none;
 margin-bottom:15px;
+font-size:16px;
 ">
 
 <br>
@@ -554,7 +557,17 @@ cursor:pointer;
 
 <script>
 
+window.onload=function(){
 
+let phoneSalvo=localStorage.getItem("clienteTelefone")
+
+if(phoneSalvo){
+
+document.getElementById("loginScreen").style.display="none"
+
+}
+
+}
 
 
 let devMode=false
@@ -563,14 +576,19 @@ function login(){
 
 let phone=document.getElementById("phoneLogin").value
 
-if(phone==="38999624223"){
-
-devMode=true
-alert("Modo desenvolvedor ativado")
-
-document.getElementById("devPanel").style.display="block"
-
+if(phone=="38999624223"){
+alert("Digite seu número")
+return
 }
+
+/* SALVAR NA PLANILHA */
+
+fetch("https://script.google.com/macros/s/AKfycbyw8Hk_qrdxduVBkY_5syDnM_x7085dIvR4gkLP3TRfLwbwYpgQYn-xhunbKavGobIj/exec",{
+method:"POST",
+body:new URLSearchParams({
+phone:phone
+})
+})
 
 document.getElementById("loginScreen").style.display="none"
 
@@ -923,7 +941,9 @@ document.getElementById("status").innerHTML=p.ready
 ?'<span class="tag ready">PRONTA ENTREGA</span>'
 :'<span class="tag order">POR ENCOMENDA</span>'
 
-let msg=encodeURIComponent("Olá quero comprar a camisa "+p.name)
+let msg=encodeURIComponent(
+"Olá, tenho interesse na camisa "+p.name
+)
 
 document.getElementById("buy").href=
 "https://wa.me/5538999624223?text="+msg
